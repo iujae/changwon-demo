@@ -1,9 +1,12 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.ArticleRequest;
+import com.example.demo.dto.ArticleResponse;
 import com.example.demo.dto.MemberRequest;
 import com.example.demo.dto.MemberResponse;
 import com.example.demo.model.Member;
 import com.example.demo.repository.MemberRepository;
+import com.example.demo.service.ArticleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +19,13 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MemberController {
     private final MemberService memberService;
+    private final ArticleService articleService;
+
+    @PostMapping("/{id}/articles")
+    @ResponseStatus(HttpStatus.CREATED)
+    public ArticleResponse postArticle(@PathVariable("id") Long id, @RequestBody ArticleRequest articleRequest) {
+        return articleService.create(id, articleRequest);
+    }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
