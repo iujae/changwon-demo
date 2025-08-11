@@ -7,11 +7,15 @@ import com.example.demo.dto.MemberResponse;
 import com.example.demo.model.Member;
 import com.example.demo.repository.MemberRepository;
 import com.example.demo.service.ArticleService;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import com.example.demo.service.MemberService;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -56,6 +60,23 @@ public class MemberController {
     @DeleteMapping("/{id}")
     public void delete(@PathVariable("id") Long id) {
         memberService.deleteById(id);
+    }
+
+    /* 리다이렉트 메서드
+    @GetMapping("/{id}/articles")
+    public void getArticle(@PathVariable("id") Long id, HttpServletResponse response) throws ServletException, IOException {
+        response.sendRedirect("/api/articles?memberId =" + id);
+    }
+
+     */
+
+    //포워딩 메서드
+    @GetMapping("/{id}/articles")
+    public void getArticle(@PathVariable("id") Long id, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.getSession()
+                .getServletContext()
+                .getRequestDispatcher("/api/articles?memberId=" + id)
+                .forward(request, response);
     }
 /*
     @GetMapping
